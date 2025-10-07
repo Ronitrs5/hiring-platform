@@ -7,6 +7,56 @@ const router = Router();
 
 /**
  * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "john.doe@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/ApiResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         user:
+ *                           $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Invalid email - user not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.post('/login', 
+  validateRequest(userSchemas.login),
+  userController.login
+);
+
+/**
+ * @swagger
  * /users:
  *   post:
  *     summary: Create a new user
@@ -20,6 +70,7 @@ const router = Router();
  *             required:
  *               - name
  *               - email
+ *               - password
  *               - role
  *             properties:
  *               name:
@@ -29,6 +80,10 @@ const router = Router();
  *                 type: string
  *                 format: email
  *                 example: "john.doe@example.com"
+ *               password:
+ *                 type: string
+ *                 minLength: 6
+ *                 example: "password123"
  *               role:
  *                 type: string
  *                 enum: [candidate, admin]

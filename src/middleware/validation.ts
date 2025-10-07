@@ -17,6 +17,7 @@ export const userSchemas = {
   create: Joi.object({
     name: Joi.string().min(2).max(100).required(),
     email: Joi.string().email().required(),
+    password: Joi.string().min(6).required(),
     role: Joi.string().valid('candidate', 'admin').required(),
     phone: Joi.string().pattern(/^\+?[\d\s-()]+$/).optional(),
     resumeUrl: Joi.string().uri().optional(),
@@ -26,6 +27,11 @@ export const userSchemas = {
     name: Joi.string().min(2).max(100).optional(),
     phone: Joi.string().pattern(/^\+?[\d\s-()]+$/).optional(),
     resumeUrl: Joi.string().uri().optional(),
+  }),
+
+  login: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).required(),
   }),
 };
 

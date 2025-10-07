@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { database } from '../config/database';
-import { IUser, CreateUserRequest, ApiResponse, PaginatedResponse } from '../models/interfaces';
+import { IUser, CreateUserRequest, LoginRequest, LoginResponse, ApiResponse, PaginatedResponse } from '../models/interfaces';
 import { 
   toObjectId, 
   getPaginationParams, 
@@ -13,6 +13,26 @@ import {
 import { AppError, asyncHandler } from '../middleware/errorHandler';
 
 class UserController {
+  // Simple login - just check if email exists
+  login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const { email }: LoginRequest = req.body;
+    
+    // Find user by email
+    const user = await database.users.findOne({ email: email });
+    if (!user) {
+      throw new AppError('Invalid email - user not found', 401);
+    }
+
+    // Remove password from response
+    const { password: userPassword, ...userResponse } = user;
+
+    const response: ApiResponse<LoginResponse> = successResponse({
+      user: userResponse
+    }, 'Login successful');
+    
+    res.json(response);
+  });
+
   // Create a new user
   createUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const userData: CreateUserRequest = req.body;
@@ -158,7 +178,7 @@ class UserController {
     const sort = getSortParams(req);
     const { search } = req.query;
 
-    let filter: any = { role: 'candidate' };
+    let filter: any = { role: 'candidate' as const };
 
     if (search) {
       const searchFilter = buildSearchFilter(search as string, ['name', 'email']);
@@ -183,7 +203,7 @@ class UserController {
     const { page, limit, skip } = getPaginationParams(req);
     const sort = getSortParams(req);
 
-    const filter = { role: 'admin' };
+    const filter = { role: 'admin' as const };
     const total = await database.users.countDocuments(filter);
     const admins = await database.users
       .find(filter)

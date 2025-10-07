@@ -4,6 +4,7 @@ export interface IUser {
   _id?: ObjectId;
   name: string;
   email: string;
+  password: string;
   role: 'candidate' | 'admin';
   phone?: string;
   resumeUrl?: string;
@@ -105,9 +106,19 @@ export interface IEvaluation {
 export interface CreateUserRequest {
   name: string;
   email: string;
+  password: string;
   role: 'candidate' | 'admin';
   phone?: string;
   resumeUrl?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: Omit<IUser, 'password'>;
 }
 
 export interface CreateJobRequest {

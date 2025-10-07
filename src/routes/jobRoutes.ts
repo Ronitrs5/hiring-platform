@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/v1/jobs:
+ * /jobs:
  *   post:
  *     summary: Create a new job
  *     tags: [Jobs]
@@ -68,7 +68,7 @@ router.post('/',
 
 /**
  * @swagger
- * /api/v1/jobs:
+ * /jobs:
  *   get:
  *     summary: Get all jobs with pagination and filtering
  *     tags: [Jobs]
@@ -115,7 +115,7 @@ router.get('/',
 
 /**
  * @swagger
- * /api/v1/jobs/stats:
+ * /jobs/stats:
  *   get:
  *     summary: Get job statistics
  *     tags: [Jobs]
@@ -174,7 +174,7 @@ router.get('/stats',
 
 /**
  * @swagger
- * /api/v1/jobs/department/{department}:
+ * /jobs/department/{department}:
  *   get:
  *     summary: Get jobs by department
  *     tags: [Jobs]
@@ -213,7 +213,7 @@ router.get('/department/:department',
 
 /**
  * @swagger
- * /api/v1/jobs/{id}:
+ * /jobs/{id}:
  *   get:
  *     summary: Get job by ID
  *     tags: [Jobs]
@@ -242,7 +242,7 @@ router.get('/:id',
 
 /**
  * @swagger
- * /api/v1/jobs/{id}:
+ * /jobs/{id}:
  *   put:
  *     summary: Update job by ID
  *     tags: [Jobs]
@@ -298,7 +298,7 @@ router.put('/:id',
 
 /**
  * @swagger
- * /api/v1/jobs/{id}:
+ * /jobs/{id}:
  *   delete:
  *     summary: Delete job by ID
  *     tags: [Jobs]
@@ -328,7 +328,7 @@ router.delete('/:id',
 
 /**
  * @swagger
- * /api/v1/jobs/{id}/applications:
+ * /jobs/{id}/applications:
  *   get:
  *     summary: Get applications for a specific job
  *     tags: [Jobs]
