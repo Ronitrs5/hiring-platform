@@ -37,7 +37,7 @@ export const jobSchemas = {
     location: Joi.string().min(2).max(100).required(),
     description: Joi.string().min(10).required(),
     requirements: Joi.array().items(Joi.string().min(1)).min(1).required(),
-    createdBy: Joi.string().hex().length(24).required(),
+    createdBy: Joi.string().hex().length(24).optional(),
   }),
   
   update: Joi.object({

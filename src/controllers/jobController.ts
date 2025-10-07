@@ -23,7 +23,7 @@ class JobController {
       location: jobData.location,
       description: jobData.description,
       requirements: jobData.requirements,
-      createdBy: toObjectId(jobData.createdBy),
+      createdBy: jobData.createdBy ? toObjectId(jobData.createdBy) : toObjectId('000000000000000000000000'), // Default admin ID for demo
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -77,7 +77,12 @@ class JobController {
           ]
         }
       },
-      { $unwind: '$creator' }
+      { 
+        $unwind: { 
+          path: '$creator', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      }
     ]).toArray();
 
     const pagination = calculatePagination(total, page, limit);
@@ -102,7 +107,12 @@ class JobController {
           ]
         }
       },
-      { $unwind: '$creator' }
+      { 
+        $unwind: { 
+          path: '$creator', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      }
     ]).toArray();
 
     if (jobs.length === 0) {

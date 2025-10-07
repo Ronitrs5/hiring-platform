@@ -116,7 +116,7 @@ export interface CreateJobRequest {
   location: string;
   description: string;
   requirements: string[];
-  createdBy: string; // ObjectId as string
+  createdBy?: string; // ObjectId as string (optional for demo)
 }
 
 export interface CreateApplicationRequest {

@@ -26,11 +26,29 @@ class ApplicationController {
       throw new AppError('You have already applied for this job', 409);
     }
 
-    // Verify candidate and job exist
-    const candidate = await database.users.findOne({ 
+    // Verify candidate exists or create demo candidate if using demo ID
+    let candidate = await database.users.findOne({ 
       _id: toObjectId(applicationData.candidateId), 
       role: 'candidate' 
     });
+    
+    // Create demo candidate if using the demo ID and candidate doesn't exist
+    if (!candidate && applicationData.candidateId === '670c75d8f4e4a1b2c3d4e5f6') {
+      const newCandidate = {
+        _id: toObjectId('670c75d8f4e4a1b2c3d4e5f6'),
+        name: 'Demo Candidate',
+        email: 'demo.candidate@example.com',
+        phone: '+1234567890',
+        role: 'candidate' as const,
+        appliedJobs: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      
+      await database.users.insertOne(newCandidate);
+      candidate = newCandidate;
+    }
+    
     if (!candidate) {
       throw new AppError('Candidate not found', 404);
     }
@@ -102,7 +120,12 @@ class ApplicationController {
           ]
         }
       },
-      { $unwind: '$candidate' },
+      { 
+        $unwind: { 
+          path: '$candidate', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      },
       {
         $lookup: {
           from: 'jobs',
@@ -114,7 +137,12 @@ class ApplicationController {
           ]
         }
       },
-      { $unwind: '$job' }
+      { 
+        $unwind: { 
+          path: '$job', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      }
     ]).toArray();
 
     const pagination = calculatePagination(total, page, limit);
@@ -139,7 +167,12 @@ class ApplicationController {
           ]
         }
       },
-      { $unwind: '$candidate' },
+      { 
+        $unwind: { 
+          path: '$candidate', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      },
       {
         $lookup: {
           from: 'jobs',
@@ -148,7 +181,12 @@ class ApplicationController {
           as: 'job'
         }
       },
-      { $unwind: '$job' }
+      { 
+        $unwind: { 
+          path: '$job', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      }
     ]).toArray();
 
     if (applications.length === 0) {
@@ -275,7 +313,12 @@ class ApplicationController {
           ]
         }
       },
-      { $unwind: '$candidate' }
+      { 
+        $unwind: { 
+          path: '$candidate', 
+          preserveNullAndEmptyArrays: true 
+        } 
+      }
     ]).toArray();
 
     const pagination = calculatePagination(total, page, limit);
