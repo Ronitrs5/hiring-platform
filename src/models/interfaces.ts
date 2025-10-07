@@ -4,7 +4,8 @@ export interface IUser {
   _id?: ObjectId;
   name: string;
   email: string;
-  role: 'candidate' | 'admin';
+  password?: string;
+  role: 'candidate' | 'admin' | 'interviewer';
   phone?: string;
   resumeUrl?: string;
   appliedJobs?: ObjectId[];

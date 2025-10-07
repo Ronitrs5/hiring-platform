@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
 import jobRoutes from './jobRoutes';
 import applicationRoutes from './applicationRoutes';
@@ -47,6 +48,7 @@ router.get('/health', (_req, res) => {
 });
 
 // Mount routes
+router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/jobs', jobRoutes);
 router.use('/applications', applicationRoutes);
