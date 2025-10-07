@@ -46,9 +46,9 @@ class UserController {
     // Build filter
     let filter: any = {};
     
-    if (role) {
-      filter.role = role;
-    }
+      if (role === 'candidate' || role === 'admin') {
+        filter.role = { $eq: role };
+      }
 
     if (search) {
       const searchFilter = buildSearchFilter(search as string, ['name', 'email']);
